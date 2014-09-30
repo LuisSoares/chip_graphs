@@ -4,6 +4,9 @@ from matplotlib.patches import Rectangle
 import os
 import re
 import sys
+from coord import *
+from scipy.interpolate import spline
+
 primers=('5\'', '.','..','...','3\'')
 color_scheme=["#c7e9b4",
 "#7fcdbb",
@@ -16,6 +19,8 @@ file_name=sys.argv[1]
 Condition=sys.argv[2]
 Conditions=sys.argv[3].split()
 Gene=file_name.split('.')[0]
+coordinates=eval(Gene)
+#print(coordinates)
 file=open(file_name)
 data=file.read()
 file.close()
@@ -49,8 +54,6 @@ while n<=4:
 		temp.append(item[n])
 	n+=1
 	std_per_primer.append(temp)
-print(means_per_primer)
-print(std_per_primer)
 ind=np.arange(N)
 width=0.15
 ind=ind+0.1
@@ -68,7 +71,7 @@ for item in means_per_primer:
 	ax.bar(ind+width*n,item,width,color=color_scheme[n+1],yerr=std_per_primer[n],alpha=0.95,ecolor='0.25',linewidth=1.5,edgecolor='w',label=primers[n])
 	n+=1
 
-	ax.set_ylim(0,max([max(item) for item in means_per_primer])*1.2)
+ax.set_ylim(0,max([max(item) for item in means_per_primer])*1.2)
 ax.set_title(Gene,fontsize=24,fontstyle='italic',fontweight="medium")
 ax.set_ylabel('IP',fontsize=16,fontweight='medium')
 ax.set_xlabel(Condition,fontsize=16,fontweight="medium")
@@ -81,5 +84,42 @@ plt.tick_params(\
     which='both',      # both major and minor ticks are affected
     bottom='off',      # ticks along the bottom edge are off
     top='off' )
-plt.legend(('5\'', '.','..','...','3\'') ,loc='best',frameon=False)
+plt.legend(('5\'', '.','..','...','3\'') ,bbox_to_anchor=(1.2, 1),frameon=False)
+plt.show()
+
+#interpolation
+fig,ax=plt.subplots(figsize=(6,4))
+ax.set_title(Gene,fontsize=24,fontstyle='italic',fontweight="medium")
+ax.yaxis.set_tick_params(labelsize=0)
+ax.xaxis.set_tick_params(labelsize=14)
+plt.subplots_adjust(bottom=0.13)
+ax.spines['bottom'].set_linewidth('2')
+ax.spines['left'].set_linewidth('2')
+ax.spines['top'].set_visible(False)
+ax.spines['right'].set_visible(False)
+ax.spines['left'].set_color('grey')
+ax.spines['bottom'].set_color('grey')
+line_color=['#e41a1c',
+'#377eb8',
+'#4daf4a',
+'#984ea3',
+'#ff7f00',
+'#ffff33',
+'#a65628',
+'#f781bf',
+'#999999']
+xdata=coordinates
+xnew=np.linspace(min(xdata),max(xdata),300)
+n=0
+ax.set_xlim(min(xdata)-100,max(xdata)+100)
+for item in means:
+	plt.plot(xnew,spline(xdata,item,xnew),color=line_color[n],linewidth=3,alpha=0.80)
+	n+=1
+plt.tick_params(\
+    #axis='y',          # changes apply to the x-axis
+    which='both',      # both major and minor ticks are affected
+    left='off',      # ticks along the bottom edge are off
+    right='off',
+	top='off')
+plt.legend(Conditions,frameon=False, bbox_to_anchor=(1.3, 1))
 plt.show()
