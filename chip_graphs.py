@@ -57,34 +57,36 @@ while n<=4:
 ind=np.arange(N)
 width=0.15
 ind=ind+0.1
-fig,ax=plt.subplots(figsize=(N*1.5,5))
-plt.subplots_adjust(bottom=0.13)
+fig = plt.figure(1,figsize=(N*1.5,5))
+ax = fig.add_subplot(111, axisbg='0.92')
 ax.spines['bottom'].set_linewidth('2')
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 ax.spines['left'].set_linewidth('2')
-ax.spines['left'].set_color('grey')
-ax.spines['bottom'].set_color('grey')
-
+ax.spines['left'].set_visible(False)
+ax.spines['bottom'].set_color('1')
+ax.spines['bottom'].set_zorder(4)
+ax.grid(axis='y',linestyle="-",color='#D8D8D8',linewidth=2)
 n=0
 for item in means_per_primer:
-	ax.bar(ind+width*n,item,width,color=color_scheme[n+1],yerr=std_per_primer[n],alpha=0.95,ecolor='0.25',linewidth=1.5,edgecolor='w',label=primers[n])
+	ax.bar(ind+width*n,item,width,color=color_scheme[n],zorder=3,yerr=std_per_primer[n],linewidth=1.5,edgecolor='0.92',label=primers[n],error_kw=dict(ecolor='gray', lw=1, capsize=3, capthick=1,zorder=4))
 	n+=1
 
 ax.set_ylim(0,max([max(item) for item in means_per_primer])*1.2)
-ax.set_title(Gene,fontsize=24,fontstyle='italic',fontweight="medium")
-ax.set_ylabel('IP',fontsize=16,fontweight='medium')
-ax.set_xlabel(Condition,fontsize=16,fontweight="medium")
+ax.set_title(Gene,fontsize=20,fontstyle='italic',fontweight="medium",color='0.35')
+ax.set_ylabel('IP',fontsize=16,fontweight='medium',color='0.35')
+ax.set_xlabel(Condition,fontsize=16,fontweight="medium",color='0.35')
 ax.set_xticks(ind+2.5*width)
-ax.set_xticklabels( Conditions,fontsize=14,fontstyle='italic',fontweight='medium')
-ax.yaxis.set_tick_params(labelsize=15)
+ax.set_xticklabels( Conditions,fontsize=16,fontstyle='italic',fontweight='light',color='0.35')
+ax.xaxis.set_tick_params(pad=8)
+ax.yaxis.set_tick_params(labelsize=12, labelcolor='0.25',color='w')
 ax.yaxis.tick_left()
 plt.tick_params(\
     axis='x',          # changes apply to the x-axis
     which='both',      # both major and minor ticks are affected
     bottom='off',      # ticks along the bottom edge are off
     top='off' )
-plt.legend(('5\'', '.','..','...','3\'') ,bbox_to_anchor=(1.2, 1),frameon=False)
+plt.legend(('5\'', '.','..','...','3\'') ,bbox_to_anchor=(1.3, 1),frameon=False)
 plt.show()
 
 #interpolation
@@ -111,7 +113,7 @@ line_color=['#e41a1c',
 xdata=coordinates
 xnew=np.linspace(min(xdata),max(xdata),300)
 n=0
-ax.set_xlim(min(xdata)-100,max(xdata)+100)
+ax.set_xlim(min(xdata)-300,max(xdata)+300)
 for item in means:
 	plt.plot(xnew,spline(xdata,item,xnew),color=line_color[n],linewidth=3,alpha=0.80)
 	n+=1
