@@ -61,7 +61,6 @@ def load_data(ChIP):
 		std.append([float(item[2]),float(item[5]),float(item[8]),float(item[11]),float(item[14])])
 	return (means,std)
 	
-	#TODO: get this part as different function
 def parse_data(means,std):
 	means_per_primer=[] #list of lists (each internal list contains the means for each condition)
 	std_per_primer=[]
@@ -131,24 +130,20 @@ ax.set_title(Gene+' '+Condition,fontsize=18,fontstyle='italic',fontweight="mediu
 ax.yaxis.set_tick_params(labelsize=0)
 ax.xaxis.set_tick_params(labelsize=14)
 plt.subplots_adjust(bottom=0.13)
-ax.spines['bottom'].set_linewidth('2')
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
-ax.spines['left'].set_linewidth('2')
 ax.spines['left'].set_visible(False)
-ax.spines['bottom'].set_color('1')
-ax.spines['bottom'].set_zorder(4)
+ax.spines['bottom'].set_visible(False)
 ax.grid(axis='y',linestyle="-",color='#D8D8D8',linewidth=1)
 xdata=coordinates
 xnew=np.linspace(min(xdata),max(xdata),300)
 n=0
-ax.set_ylim(0,25)
+ax.set_ylim(0,max(max(means))*1.2)
 ax.set_xlim(min(xdata)-300,max(xdata)+300)
 for item in means:
 	plt.plot(xnew,spline(xdata,item,xnew),color=line_color[n],zorder=4,linewidth=3,alpha=0.80)
 	n+=1
 plt.tick_params(\
-    #axis='y',          # changes apply to the x-axis
     which='both',      # both major and minor ticks are affected
     left='off',      # ticks along the bottom edge are off
     right='off',
