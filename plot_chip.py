@@ -59,8 +59,10 @@ def load_data(ChIP):
 		means.append([float(item[0]),float(item[3]),float(item[6]),float(item[9]),float(item[12])])
 	for item in data2:
 		std.append([float(item[2]),float(item[5]),float(item[8]),float(item[11]),float(item[14])])
+	return (means,std)
 	
 	#TODO: get this part as different function
+def parse_data(means,std):
 	means_per_primer=[] #list of lists (each internal list contains the means for each condition)
 	std_per_primer=[]
 	n=0
@@ -81,9 +83,10 @@ def load_data(ChIP):
 	#in case primer order is inverted
 	#means_per_primer=means_per_primer[::-1]
 	#std_per_primer=std_per_primer[::-1]
-	return(means,std,means_per_primer,std_per_primer)
+	return(means_per_primer,std_per_primer)
 	
-means,std,means_per_primer,std_per_primer=load_data(file_name)
+means,std=load_data(file_name)
+means_per_primer,std_per_primer=parse_data(means,std)
 	
 #To bar graphs	
 ind=np.arange(len(Conditions))
