@@ -115,11 +115,7 @@ ax.set_xticklabels( Conditions,fontsize=16,fontstyle='italic',fontweight='light'
 ax.xaxis.set_tick_params(pad=8)
 ax.yaxis.set_tick_params(labelsize=12, labelcolor='0.25',color='w')
 ax.yaxis.tick_left()
-plt.tick_params(\
-    axis='x',          # changes apply to the x-axis
-    which='both',      # both major and minor ticks are affected
-    bottom='off',      # ticks along the bottom edge are off
-    top='off' )
+plt.tick_params(axis='x',which='both',bottom='off',top='off' )
 plt.legend(('5\'', '.','..','...','3\'') ,bbox_to_anchor=(1.2, 1),frameon=False)
 plt.show()
 
@@ -143,10 +139,6 @@ ax.set_xlim(min(xdata)-300,max(xdata)+300)
 for item in means:
 	plt.plot(xnew,spline(xdata,item,xnew),color=line_color[n],zorder=4,linewidth=3,alpha=0.80)
 	n+=1
-plt.tick_params(\
-    which='both',      # both major and minor ticks are affected
-    left='off',      # ticks along the bottom edge are off
-    right='off',
-	top='off')
+plt.tick_params(which='both',left='off',right='off',top='off')
 plt.legend(Conditions,frameon=False, bbox_to_anchor=(1.35, 1))
 plt.show()
