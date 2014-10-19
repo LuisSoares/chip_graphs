@@ -20,11 +20,12 @@ import os
 import sys
 from coord import * #coord contains the coordinates of primers of used genes
 from scipy.interpolate import spline
-
+from seaborn import blend_palette,desaturate,color_palette
 #global variables definitions 
 primers=('5\'', '.','..','...','3\'')
-color_scheme=["#c7e9b4", "#7fcdbb", "#41b6c4", "#1d91c0", "#225ea8", "#0c2c84",]
-line_color=['Blue','Yellow','Red','Orange','#00CC66','Green','Orange','Yellow','Yellow']
+color_scheme=blend_palette([desaturate("#009B76", 0), "#009B76"], 5)
+
+line_color=color_palette("hls", 8)
 os.chdir('/Users/Luis/Desktop')
 
 '''global definitions from command line
@@ -92,7 +93,7 @@ ind=np.arange(len(Conditions))
 width=0.15
 ind=ind+0.1
 fig = plt.figure(1,figsize=(len(Conditions)*1.5,5))
-ax = fig.add_subplot(111, axisbg='0.92')
+ax = fig.add_subplot(111, axisbg='0.95')
 ax.spines['bottom'].set_linewidth('2')
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
@@ -100,7 +101,7 @@ ax.spines['left'].set_linewidth('2')
 ax.spines['left'].set_visible(False)
 ax.spines['bottom'].set_color('1')
 ax.spines['bottom'].set_zorder(4)
-ax.grid(axis='y',linestyle="-",color='#D8D8D8',linewidth=1)
+ax.grid(axis='y',linestyle="-",color='white',linewidth=2)
 n=0
 for item in means_per_primer:
 	ax.bar(ind+width*n,item,width,color=color_scheme[n],zorder=3,yerr=std_per_primer[n],linewidth=1.5,edgecolor='0.92',label=primers[n],error_kw=dict(ecolor='gray', lw=1, capsize=3, capthick=1,zorder=4))
@@ -121,7 +122,7 @@ plt.show()
 
 #interpolation
 fig = plt.figure(1,figsize=(6,4))
-ax = fig.add_subplot(111, axisbg='0.92')
+ax = fig.add_subplot(111, axisbg='0.95')
 ax.set_title(Gene+' '+Condition,fontsize=18,fontstyle='italic',fontweight="medium",color='0.35')
 ax.yaxis.set_tick_params(labelsize=0)
 ax.xaxis.set_tick_params(labelsize=14)
@@ -129,12 +130,14 @@ plt.subplots_adjust(bottom=0.13)
 ax.spines['top'].set_visible(False)
 ax.spines['right'].set_visible(False)
 ax.spines['left'].set_visible(False)
-ax.spines['bottom'].set_visible(False)
-ax.grid(axis='y',linestyle="-",color='#D8D8D8',linewidth=1)
+ax.spines['bottom'].set_visible(True)
+ax.spines['bottom'].set_color('grey')
+ax.spines['bottom'].set_linewidth(2)
+ax.grid(axis='y',linestyle="-",color='white',linewidth=2)
 xdata=coordinates
 xnew=np.linspace(min(xdata),max(xdata),300)
 n=0
-ax.set_ylim(0,max(max(means))*1.2)
+ax.set_ylim(0,max(max(means))*2)
 ax.set_xlim(min(xdata)-300,max(xdata)+300)
 for item in means:
 	plt.plot(xnew,spline(xdata,item,xnew),color=line_color[n],zorder=4,linewidth=3,alpha=0.80)
